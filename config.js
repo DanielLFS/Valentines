@@ -57,35 +57,14 @@ window.VAL_CONFIG = {
 
   // Put your images in assets/images/ and reference them here.
   // You can use URLs too, but local files are easiest.
-  images: {
-    intro: "assets/images/intro.svg",
-    question: "assets/images/question.svg",
-    yes: "assets/images/yes.svg",
-    no: "assets/images/no.svg",
-  },
+  // Theme images: add your own files under assets/images/ and reference them here.
+  // (Placeholders removed.)
+  images: {},
 
   // Floating visuals (scrolly mode). These can be photos, stickers, etc.
   // Put PNGs/SVGs in assets/images and point imageKey to one of VAL_CONFIG.images keys,
   // or use src directly.
-  floating: [
-    {
-      id: "float-heart",
-      src: "assets/images/yes.svg",
-      widthPx: 160,
-      // position is relative to viewport center
-      from: { x: -360, y: -180, rot: -18, scale: 0.95, opacity: 0.0 },
-      to: { x: -320, y: -220, rot: 12, scale: 1.05, opacity: 0.9 },
-      chapterRange: ["intro", "question"],
-    },
-    {
-      id: "float-sparkle",
-      src: "assets/images/question.svg",
-      widthPx: 120,
-      from: { x: 380, y: -120, rot: 10, scale: 0.9, opacity: 0.0 },
-      to: { x: 420, y: -160, rot: 32, scale: 1.0, opacity: 0.75 },
-      chapterRange: ["intro", "question"],
-    },
-  ],
+  floating: [],
 
   // Scrollytelling chapters
   pages: {
@@ -96,11 +75,11 @@ window.VAL_CONFIG = {
           id: "intro",
           title: "Hey you :)",
           subtitle: "Scroll a little… I made this for you.",
+          showBadge: true,
           body: [
             "This is a scroll-story page (Apple product page vibes, but romantic).",
             "As you scroll, things reveal and float around.",
           ],
-          imageKey: "intro",
           trackVh: 170,
           layout: "split",
         },
@@ -108,11 +87,11 @@ window.VAL_CONFIG = {
           id: "build",
           title: "A quick confession",
           subtitle: "You make life feel lighter.",
+          showBadge: false,
           body: [
             "I like you… a lot.",
             "And I’d love to make a Valentine plan with you.",
           ],
-          imageKey: "question",
           trackVh: 170,
           layout: "split",
         },
@@ -162,7 +141,6 @@ window.VAL_CONFIG = {
     yes: {
       title: "YAY!!!",
       subtitle: "Best answer ever.",
-      imageKey: "yes",
       body: [
         "It’s official.",
         "Text me: what do you want to do + when?",
@@ -177,7 +155,6 @@ window.VAL_CONFIG = {
     no: {
       title: "All good 💛",
       subtitle: "Thanks for being honest.",
-      imageKey: "no",
       body: [
         "No hard feelings — you’re still my favorite human.",
         "If you want, we can still do something low-key.",
@@ -198,7 +175,6 @@ window.VAL_CONFIG = {
       id: "intro",
       title: "Hey you :)",
       subtitle: "I made you a tiny page.",
-      imageKey: "intro",
       body: [
         "Before you keep going… I just want you to know you make my days better.",
         "Click next — I have a question.",
@@ -211,7 +187,6 @@ window.VAL_CONFIG = {
       id: "question",
       title: "Will you be my Valentine?",
       subtitle: "No pressure. Just vibes.",
-      imageKey: "question",
       body: [
         "We can do something chill, something fancy, or something silly.",
         "You get to pick.",
@@ -227,7 +202,6 @@ window.VAL_CONFIG = {
       id: "yes",
       title: "YAY!!!",
       subtitle: "Best answer ever.",
-      imageKey: "yes",
       body: [
         "Okay now it’s official.",
         "Text me your dream plan: food, activity, time — I’m in.",
@@ -241,7 +215,6 @@ window.VAL_CONFIG = {
       id: "no",
       title: "All good 💛",
       subtitle: "Thanks for being honest.",
-      imageKey: "no",
       body: [
         "No hard feelings — you’re still my favorite human.",
         "If you want, we can still do something low-key as friends.",

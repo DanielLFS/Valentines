@@ -441,7 +441,8 @@
     const chapterMeta = new Map();
 
     // Build DOM
-    for (const ch of chapters) {
+    for (let chapterIndex = 0; chapterIndex < chapters.length; chapterIndex++) {
+      const ch = chapters[chapterIndex];
       const track = document.createElement("div");
       track.className = "chapterTrack";
       track.id = `chapter-${ch.id}`;
@@ -456,16 +457,19 @@
 
       const header = document.createElement("header");
       header.className = "header";
-      const badge = document.createElement("div");
-      badge.className = "badge";
-      badge.textContent = cfg.badgeText || "";
+      const shouldShowBadge = typeof ch.showBadge === "boolean" ? ch.showBadge : chapterIndex === 0;
+      if (shouldShowBadge && cfg.badgeText) {
+        const badge = document.createElement("div");
+        badge.className = "badge";
+        badge.textContent = cfg.badgeText;
+        header.appendChild(badge);
+      }
       const h = document.createElement("h2");
       h.className = "title";
       h.textContent = ch.title || "";
       const sub = document.createElement("p");
       sub.className = "subtitle";
       sub.textContent = ch.subtitle || "";
-      header.appendChild(badge);
       header.appendChild(h);
       header.appendChild(sub);
       chapter.appendChild(header);
@@ -822,7 +826,8 @@
     const chapterMeta = new Map();
     const trackEls = [];
 
-    for (const ch of chapters) {
+    for (let chapterIndex = 0; chapterIndex < chapters.length; chapterIndex++) {
+      const ch = chapters[chapterIndex];
       const track = document.createElement("div");
       track.className = "chapterTrack";
       track.id = `chapter-${ch.id}`;
@@ -837,16 +842,19 @@
 
       const header = document.createElement("header");
       header.className = "header";
-      const badge = document.createElement("div");
-      badge.className = "badge";
-      badge.textContent = cfg.badgeText || "";
+      const shouldShowBadge = typeof ch.showBadge === "boolean" ? ch.showBadge : chapterIndex === 0;
+      if (shouldShowBadge && cfg.badgeText) {
+        const badge = document.createElement("div");
+        badge.className = "badge";
+        badge.textContent = cfg.badgeText;
+        header.appendChild(badge);
+      }
       const h = document.createElement("h2");
       h.className = "title";
       h.textContent = ch.title || "";
       const sub = document.createElement("p");
       sub.className = "subtitle";
       sub.textContent = ch.subtitle || "";
-      header.appendChild(badge);
       header.appendChild(h);
       header.appendChild(sub);
       chapter.appendChild(header);
@@ -873,6 +881,9 @@
         img.alt = ch.imageAlt || "";
         media.appendChild(img);
         right.appendChild(media);
+      } else {
+        // No image for this chapter: avoid an empty right column.
+        grid.style.gridTemplateColumns = "1fr";
       }
 
       grid.appendChild(left);
@@ -897,16 +908,12 @@
       chapter.className = "chapter";
       const header = document.createElement("header");
       header.className = "header";
-      const badge = document.createElement("div");
-      badge.className = "badge";
-      badge.textContent = cfg.badgeText || "";
       const h = document.createElement("h2");
       h.className = "title";
       h.textContent = story.cta.title || "One more thing…";
       const sub = document.createElement("p");
       sub.className = "subtitle";
       sub.textContent = story.cta.subtitle || "";
-      header.appendChild(badge);
       header.appendChild(h);
       header.appendChild(sub);
       chapter.appendChild(header);
