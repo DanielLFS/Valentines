@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffeff6"/>
+      <stop offset="1" stop-color="#f5f3ff"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <circle cx="240" cy="220" r="160" fill="#ff3f84" opacity="0.20" filter="url(#blur)"/>
+  <circle cx="980" cy="260" r="200" fill="#7c3aed" opacity="0.16" filter="url(#blur)"/>
+  <circle cx="760" cy="620" r="220" fill="#06b6d4" opacity="0.12" filter="url(#blur)"/>
+
+  <g font-family="ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial" fill="#12131a">
+    <text x="80" y="340" font-size="56" font-weight="800">Intro image</text>
+    <text x="80" y="405" font-size="26" opacity="0.70">Replace me with a photo in assets/images/</text>
+    <text x="80" y="450" font-size="22" opacity="0.62">Tip: update config.js → VAL_CONFIG.images.intro</text>
+  </g>
+
+  <g transform="translate(80 520)">
+    <rect x="0" y="0" width="520" height="170" rx="22" fill="rgba(255,255,255,0.70)" stroke="rgba(0,0,0,0.08)"/>
+    <text x="28" y="62" font-family="ui-sans-serif,system-ui" font-size="22" fill="#12131a" opacity="0.78">File:</text>
+    <text x="90" y="62" font-family="ui-monospace,SFMono-Regular,Consolas,Monaco" font-size="22" fill="#12131a">assets/images/intro.svg</text>
+    <text x="28" y="112" font-family="ui-sans-serif,system-ui" font-size="20" fill="#12131a" opacity="0.70">Swap with intro.jpg/png and update config.</text>
+  </g>
+</svg>

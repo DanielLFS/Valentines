@@ -18,10 +18,10 @@ window.VAL_CONFIG = {
   // Put your images in assets/images/ and reference them here.
   // You can use URLs too, but local files are easiest.
   images: {
-    intro: "assets/images/intro.jpg",
-    question: "assets/images/question.jpg",
-    yes: "assets/images/yes.jpg",
-    no: "assets/images/no.jpg",
+    intro: "assets/images/intro.svg",
+    question: "assets/images/question.svg",
+    yes: "assets/images/yes.svg",
+    no: "assets/images/no.svg",
   },
 
   // Scenes define what shows on each step.
