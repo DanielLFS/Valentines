@@ -2,13 +2,20 @@
 
 A cute, customizable Valentine "ask" page you can host and share as a link.
 
+## Flow (multi-page)
+
+- `index.html`: scroll-story up to a confession + a CTA button
+- `question.html`: full-screen question with playful chase buttons
+- `yes.html` / `no.html`: separate endings
+
 ## Customize
 
 Edit `config.js`:
 
 - `pageTitle`, `badgeText`, `hintText`
 - `images`: put your pictures in `assets/images/` and update the filenames
-- `scenes`: change text + flow (add/remove scenes, change button routes)
+- `pages`: edit the story chapters, question text, and yes/no endings
+- `chase`: tune how much the buttons dodge + what they say
 
 ### Add your images
 
@@ -33,6 +40,12 @@ If you want a local web server (helps with consistent behavior), use VS Code’s
 5. Your link will look like:
 
 `https://YOUR_GITHUB_USERNAME.github.io/Valentines/`
+
+You can also directly link to:
+
+- `/question.html`
+- `/yes.html`
+- `/no.html`
 
 ## Sending it
 
