@@ -137,10 +137,11 @@ button {
   cursor: pointer;
   transition: transform 120ms ease, background 120ms ease;
   user-select: none;
+  transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(var(--scale, 1));
 }
 
 .btn:active {
-  transform: translateY(1px) scale(0.99);
+  --scale: 0.99;
 }
 
 .btn:focus-visible {
@@ -202,6 +203,44 @@ button {
   inset: 0;
   pointer-events: none;
   z-index: 20;
+}
+
+/* Scroll mode */
+.scrollRoot {
+  width: min(820px, 100%);
+  display: grid;
+  gap: 18px;
+}
+
+.sceneCard {
+  background: var(--card);
+  border: 1px solid var(--cardBorder);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+.sceneCard[data-reveal="true"] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.sceneCard.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.microLink {
+  background: transparent;
+  border: 0;
+  padding: 6px 0;
+  cursor: pointer;
+  color: rgba(18, 19, 26, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

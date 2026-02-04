@@ -2,6 +2,14 @@
 // Keep it wholesome + honest: this page should feel like a cute card.
 
 window.VAL_CONFIG = {
+  // Rendering mode:
+  // - "single": one card that switches scenes (original behavior)
+  // - "scroll": all scenes stacked; scrolling reveals them
+  mode: "scroll",
+
+  // Only applies in scroll mode.
+  revealOnScroll: true,
+
   // Page/browser tab title
   pageTitle: "Valentine?",
 
@@ -14,6 +22,17 @@ window.VAL_CONFIG = {
   // If true, the user can always choose "No" and it will be respected.
   // If false, the flow can be playful, but keep it kind.
   allowNo: true,
+
+  // Optional playful behavior for the "No" button on the question scene.
+  // Guardrails:
+  // - A clear alternative "No" link is always shown so it never becomes coercive.
+  // - After maxDodges, the button stops moving (if stopAfterMaxDodges=true).
+  runawayNo: {
+    enabled: true,
+    maxDodges: 6,
+    scrollPerDodgePx: 140,
+    stopAfterMaxDodges: true,
+  },
 
   // Put your images in assets/images/ and reference them here.
   // You can use URLs too, but local files are easiest.
@@ -50,7 +69,9 @@ window.VAL_CONFIG = {
       ],
       actions: [
         { label: "Yes 💖", variant: "primary", to: "yes" },
-        { label: "Not this time", variant: "secondary", to: "no" },
+        // In scroll mode, this button can optionally "run away" for a playful effect.
+        // A separate always-clickable "No" link is still shown.
+        { label: "Not this time", variant: "secondary", to: "no", runaway: true },
       ],
     },
     {

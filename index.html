@@ -11,7 +11,10 @@
     <div class="bg" aria-hidden="true"></div>
 
     <main class="wrap">
-      <section class="card" aria-live="polite">
+      <!-- Scroll mode renders multiple cards below. Single mode uses the card section. -->
+      <div id="scrollRoot" class="scrollRoot" hidden></div>
+
+      <section class="card" id="singleCard" aria-live="polite">
         <header class="header">
           <div class="badge" id="badge">A tiny page from me to you</div>
           <h1 class="title" id="title">Loading…</h1>
