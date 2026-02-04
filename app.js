@@ -27,6 +27,87 @@
   const confettiCanvas = $("confetti");
   const confettiCtx = confettiCanvas.getContext("2d");
 
+  function applyBackgroundFromConfig() {
+    const bgCfg = cfg.background;
+    if (!bgCfg) return;
+
+    const root = document.documentElement;
+    const style = (bgCfg.style || "paper").toLowerCase();
+
+    let photoUrl = "";
+    const images = Array.isArray(bgCfg.stockImages) ? bgCfg.stockImages.filter(Boolean) : [];
+    if (style === "stock" && images.length) {
+      photoUrl = images[Math.floor(Math.random() * images.length)];
+    }
+
+    const photoOpacity = typeof bgCfg.photoOpacity === "number" ? bgCfg.photoOpacity : 0;
+    const photoBlurPx = typeof bgCfg.photoBlurPx === "number" ? bgCfg.photoBlurPx : 0;
+    const photoSaturate = typeof bgCfg.photoSaturate === "number" ? bgCfg.photoSaturate : 1;
+
+    const showLines = bgCfg.showLines === true;
+    const showDoodles = bgCfg.showDoodles !== false;
+    const doodlesOpacity = typeof bgCfg.doodlesOpacity === "number" ? bgCfg.doodlesOpacity : 0.18;
+
+    root.style.setProperty("--bg-photo-url", photoUrl ? `url(${JSON.stringify(photoUrl)})` : "none");
+    root.style.setProperty("--bg-photo-opacity", photoUrl ? String(photoOpacity) : "0");
+    root.style.setProperty("--bg-photo-blur", `${Math.max(0, photoBlurPx)}px`);
+    root.style.setProperty("--bg-photo-saturate", String(Math.max(0, photoSaturate)));
+
+    // If we have a real photo, default to minimal paper effects unless explicitly enabled.
+    const linesOpacity = showLines ? "0.9" : photoUrl ? "0" : "0.9";
+    root.style.setProperty("--bg-lines-opacity", linesOpacity);
+
+    const finalDoodlesOpacity = showDoodles ? (photoUrl ? String(doodlesOpacity) : String(doodlesOpacity)) : "0";
+    root.style.setProperty("--bg-doodles-opacity", finalDoodlesOpacity);
+  }
+
+  function ensureLetterHud() {
+    const existing = document.querySelector(".letterHud");
+    if (existing) return existing;
+
+    const hud = document.createElement("div");
+    hud.className = "letterHud";
+    hud.setAttribute("aria-label", "Letter details");
+
+    const left = document.createElement("div");
+    left.className = "letterCorner letterTo";
+    const leftIcon = document.createElement("span");
+    leftIcon.className = "letterIcon";
+    leftIcon.textContent = "💌";
+    leftIcon.setAttribute("aria-hidden", "true");
+    const leftText = document.createElement("span");
+    leftText.className = "letterText";
+    left.appendChild(leftIcon);
+    left.appendChild(leftText);
+
+    const right = document.createElement("div");
+    right.className = "letterCorner letterFrom";
+    const rightText = document.createElement("span");
+    rightText.className = "letterText";
+    const rightIcon = document.createElement("span");
+    rightIcon.className = "letterIcon";
+    rightIcon.textContent = "💋";
+    rightIcon.setAttribute("aria-hidden", "true");
+    right.appendChild(rightText);
+    right.appendChild(rightIcon);
+
+    hud.appendChild(left);
+    hud.appendChild(right);
+    document.body.appendChild(hud);
+    return hud;
+  }
+
+  applyBackgroundFromConfig();
+
+  const letterCfg = cfg.letter;
+  if (letterCfg?.enabled !== false) {
+    const hud = ensureLetterHud();
+    const toEl = hud.querySelector(".letterTo .letterText");
+    const fromEl = hud.querySelector(".letterFrom .letterText");
+    if (toEl) toEl.textContent = letterCfg?.to || "";
+    if (fromEl) fromEl.textContent = letterCfg?.from || "";
+  }
+
   document.title = cfg.pageTitle || document.title;
   badgeEl.textContent = cfg.badgeText || "";
   hintEl.textContent = cfg.hintText || "";

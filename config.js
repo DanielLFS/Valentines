@@ -21,6 +21,27 @@ window.VAL_CONFIG = {
   // Small pill at the top
   badgeText: "A tiny page from me to you",
 
+  // Background love-letter vibe (top corners)
+  letter: {
+    enabled: true,
+    to: "To: Lovely Lauren",
+    from: "From: Boyfriend Dan",
+  },
+
+  // Background theming
+  // Tip: download a royalty-free photo (paper/envelope/love letter) and put it in assets/images/,
+  // then set e.g. stockImages: ["assets/images/letter-bg.jpg"].
+  background: {
+    style: "stock", // "stock" | "paper"
+    stockImages: ["assets/images/untiteled.jpg"],
+    photoOpacity: 0.28,
+    photoBlurPx: 0,
+    photoSaturate: 1.05,
+    showLines: false,
+    showDoodles: true,
+    doodlesOpacity: 0.18,
+  },
+
   // Optional footer hint text
   hintText: "Made with love (and a tiny bit of JavaScript).",
 

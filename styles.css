@@ -35,9 +35,95 @@ body {
 .bg {
   position: fixed;
   inset: 0;
-  background: radial-gradient(1200px 800px at 20% 10%, var(--bg1), transparent),
-    radial-gradient(1100px 800px at 80% 30%, var(--bg2), transparent),
-    linear-gradient(180deg, #fff, #fff);
+  background: linear-gradient(180deg, #fffafc 0%, #fff 100%);
+  overflow: hidden;
+}
+
+.bgPhoto,
+.bgLines,
+.bgDoodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bgPhoto {
+  background-image: var(--bg-photo-url, none);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--bg-photo-opacity, 0);
+  filter: blur(var(--bg-photo-blur, 0px)) saturate(var(--bg-photo-saturate, 1));
+  transform: scale(1.04);
+}
+
+.bgLines {
+  opacity: var(--bg-lines-opacity, 0);
+  background:
+    radial-gradient(1200px 800px at 20% 10%, var(--bg1), transparent 60%),
+    radial-gradient(1100px 800px at 80% 30%, var(--bg2), transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 63, 132, 0.045) 0px,
+      rgba(255, 63, 132, 0.045) 1px,
+      transparent 1px,
+      transparent 34px
+    );
+}
+
+.bgDoodles {
+  opacity: var(--bg-doodles-opacity, 0);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='220'%20height='220'%20viewBox='0%200%20220%20220'%3E%3Cg%20opacity='1'%3E%3Cpath%20d='M46%2096c0-9%207-16%2016-16%207%200%2012%204%2014%208%202-4%207-8%2014-8%209%200%2016%207%2016%2016%200%2013-13%2023-30%2034-17-11-30-21-30-34z'%20fill='%23ff3f84'/%3E%3Cpath%20d='M153%20144c0-6%205-11%2011-11%205%200%209%203%2010%206%201-3%205-6%2010-6%206%200%2011%205%2011%2011%200%209-9%2016-21%2024-12-8-21-15-21-24z'%20fill='%23ff3f84'/%3E%3Cpath%20d='M72%20154c8-10%2026-10%2034%200'%20stroke='%23ff3f84'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'/%3E%3Cpath%20d='M73%20155c10%2012%2024%2012%2034%200'%20stroke='%23ff3f84'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'/%3E%3Cpath%20d='M170%2066c8-10%2026-10%2034%200'%20stroke='%23ff3f84'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'/%3E%3Cpath%20d='M171%2067c10%2012%2024%2012%2034%200'%20stroke='%23ff3f84'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  background-position: 0 0;
+}
+
+.letterHud {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 8;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.letterCorner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(18, 19, 26, 0.78);
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.letterIcon {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+@media (max-width: 560px) {
+  .letterHud {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+  }
+  .letterCorner {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+  .letterIcon {
+    font-size: 15px;
+  }
 }
 
 .wrap {
