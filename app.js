@@ -1081,9 +1081,29 @@
     let confirmIndex = 0;
     let confirmUsed = false;
 
+    let yesBaseScale = yesScaleStart;
+
+    function setYesBaseScale(scale) {
+      yesBaseScale = scale;
+      yesBtn.style.setProperty("--scale", String(yesBaseScale));
+    }
+
+    function popYes() {
+      // Uses the existing transform transition (120ms) for a bounce.
+      const up = yesBaseScale + 0.12;
+      const down = Math.max(0.6, yesBaseScale - 0.04);
+      yesBtn.style.setProperty("--scale", String(up));
+      setTimeout(() => {
+        yesBtn.style.setProperty("--scale", String(down));
+      }, 140);
+      setTimeout(() => {
+        yesBtn.style.setProperty("--scale", String(yesBaseScale));
+      }, 280);
+    }
+
     function applyYesScale() {
       const scale = yesScaleStart + confirmIndex * yesScaleStep;
-      yesBtn.style.setProperty("--scale", String(scale));
+      setYesBaseScale(scale);
     }
 
     function showConfirmPrompt() {
@@ -1092,13 +1112,10 @@
       const idx = Math.min(confirmIndex, confirmPrompts.length - 1);
       setTaunt(confirmPrompts[idx]);
       applyYesScale();
+      popYes();
 
       if (noConfirm.noLabelDuring) noBtn.textContent = noConfirm.noLabelDuring;
       if (noConfirm.yesLabelDuring) yesBtn.textContent = noConfirm.yesLabelDuring;
-      // retrigger the pop animation
-      yesBtn.classList.remove("isReady");
-      // eslint-disable-next-line no-unused-expressions
-      yesBtn.offsetWidth;
       yesBtn.classList.add("isReady");
     }
 
@@ -1205,7 +1222,7 @@
     });
 
     // Start scales clean
-    yesBtn.style.setProperty("--scale", String(yesScaleStart));
+    setYesBaseScale(yesScaleStart);
 
     // Load taunts/prompts from text files (if provided)
     // Only override before the user starts interacting, to avoid mid-run changes.
