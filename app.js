@@ -428,7 +428,13 @@
     // Sticky progress pill
     const pill = document.createElement("div");
     pill.className = "progressPill";
-    pill.textContent = "Scroll";
+    const pillLabel = document.createElement("span");
+    pillLabel.className = "pillLabel";
+    pillLabel.textContent = "Scroll";
+    const pillBar = document.createElement("div");
+    pillBar.className = "pillBar";
+    pill.appendChild(pillLabel);
+    pill.appendChild(pillBar);
     scrollyRootEl.appendChild(pill);
 
     const chapterEls = [];
@@ -804,10 +810,17 @@
 
     const pill = document.createElement("div");
     pill.className = "progressPill";
-    pill.textContent = "Scroll";
+    const pillLabel = document.createElement("span");
+    pillLabel.className = "pillLabel";
+    pillLabel.textContent = "Scroll";
+    const pillBar = document.createElement("div");
+    pillBar.className = "pillBar";
+    pill.appendChild(pillLabel);
+    pill.appendChild(pillBar);
     scrollyRootEl.appendChild(pill);
 
     const chapterMeta = new Map();
+    const trackEls = [];
 
     for (const ch of chapters) {
       const track = document.createElement("div");
@@ -870,6 +883,7 @@
       track.appendChild(sticky);
       scrollyRootEl.appendChild(track);
       chapterMeta.set(ch.id, { track });
+      trackEls.push(track);
     }
 
     // CTA card (non-sticky)
@@ -914,6 +928,21 @@
       sticky.appendChild(chapter);
       ctaTrack.appendChild(sticky);
       scrollyRootEl.appendChild(ctaTrack);
+      trackEls.push(ctaTrack);
+    }
+
+    // Discrete section bar (one segment per track)
+    const segFills = [];
+    pillBar.innerHTML = "";
+    for (let i = 0; i < trackEls.length; i++) {
+      const seg = document.createElement("div");
+      seg.className = "pillSeg";
+      const fill = document.createElement("div");
+      fill.className = "pillFill";
+      fill.style.transform = "scaleX(0)";
+      seg.appendChild(fill);
+      pillBar.appendChild(seg);
+      segFills.push(fill);
     }
 
     // Floating items (optional)
@@ -958,10 +987,41 @@
       return clamp01((-rect.top) / total);
     }
 
+    function trackProgress(trackEl) {
+      if (!trackEl) return 0;
+      const rect = trackEl.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const total = Math.max(1, rect.height - viewH);
+      return clamp01((-rect.top) / total);
+    }
+
+    function overallStoryProgress() {
+      const startEl = trackEls[0];
+      const endEl = trackEls[trackEls.length - 1];
+      if (!startEl || !endEl) return 0;
+
+      // Convert element positions (viewport-relative) to document coordinates.
+      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      const startY = scrollY + startEl.getBoundingClientRect().top;
+      const endY =
+        scrollY +
+        endEl.getBoundingClientRect().top +
+        endEl.offsetHeight -
+        window.innerHeight;
+
+      const denom = Math.max(1, endY - startY);
+      return clamp01((scrollY - startY) / denom);
+    }
+
     function update() {
-      // pill: show first chapter progress for simplicity
-      const active = chapters[0]?.id;
-      if (active) pill.textContent = `SCROLL · ${Math.round(chapterProgress(active) * 100)}%`;
+      // pill: overall progress through the whole story page
+      pillLabel.textContent = `STORY · ${Math.round(overallStoryProgress() * 100)}%`;
+
+      for (let i = 0; i < trackEls.length; i++) {
+        const p = trackProgress(trackEls[i]);
+        const node = segFills[i];
+        if (node) node.style.transform = `scaleX(${p})`;
+      }
 
       for (const f of floats) {
         const node = floatNodes.get(f.id);
@@ -978,6 +1038,8 @@
       if (!prefersReducedMotion()) requestAnimationFrame(update);
     }
 
+    // Run once even in reduced-motion mode (no animation loop).
+    update();
     if (!prefersReducedMotion()) requestAnimationFrame(update);
   }
 
