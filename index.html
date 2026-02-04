@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Valentine?</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <main class="wrap">
+      <section class="card" aria-live="polite">
+        <header class="header">
+          <div class="badge" id="badge">A tiny page from me to you</div>
+          <h1 class="title" id="title">Loading…</h1>
+          <p class="subtitle" id="subtitle"></p>
+        </header>
+
+        <div class="media" id="media" hidden>
+          <img id="image" alt="" />
+        </div>
+
+        <div class="body" id="body"></div>
+
+        <div class="actions" id="actions"></div>
+
+        <footer class="footer">
+          <button class="link" id="restart" type="button" hidden>Restart</button>
+          <span class="hint" id="hint"></span>
+        </footer>
+      </section>
+
+      <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
