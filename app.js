@@ -1077,7 +1077,7 @@
     const noConfirm = q?.noConfirm || {};
     let confirmPrompts = Array.isArray(noConfirm.prompts) ? noConfirm.prompts : [];
     const yesScaleStart = typeof noConfirm.yesScaleStart === "number" ? noConfirm.yesScaleStart : 1.0;
-    const yesScaleStep = typeof noConfirm.yesScaleStep === "number" ? noConfirm.yesScaleStep : 0.14;
+    const yesScaleStep = typeof noConfirm.yesScaleStep === "number" ? noConfirm.yesScaleStep : 0.18;
     let confirmIndex = 0;
     let confirmUsed = false;
 
@@ -1101,17 +1101,13 @@
       }, 280);
     }
 
-    function applyYesScale() {
-      const scale = yesScaleStart + confirmIndex * yesScaleStep;
-      setYesBaseScale(scale);
-    }
-
-    function showConfirmPrompt() {
+    function showConfirmPrompt(stepIndex) {
       if (!confirmPrompts.length) return;
       confirmUsed = true;
-      const idx = Math.min(confirmIndex, confirmPrompts.length - 1);
+      const idx = Math.min(stepIndex, confirmPrompts.length - 1);
       setTaunt(confirmPrompts[idx]);
-      applyYesScale();
+      const scale = Math.min(3.0, yesScaleStart + (idx + 1) * yesScaleStep);
+      setYesBaseScale(scale);
       popYes();
 
       if (noConfirm.noLabelDuring) noBtn.textContent = noConfirm.noLabelDuring;
@@ -1204,7 +1200,7 @@
 
       // Confirm loop
       if (confirmPrompts.length && confirmIndex < confirmPrompts.length) {
-        showConfirmPrompt();
+        showConfirmPrompt(confirmIndex);
         confirmIndex += 1;
         return;
       }

@@ -148,7 +148,7 @@ window.VAL_CONFIG = {
         ],
         promptsFile: "assets/text/no-confirm-prompts.txt",
         yesScaleStart: 1.0,
-        yesScaleStep: 0.14,
+        yesScaleStep: 0.18,
         noLabelDuring: "I’m sure",
         yesLabelDuring: "Okay fine… YES 💖",
         finalNoTaunt: "Okay. I’ll stop asking 💛",
