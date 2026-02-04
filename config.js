@@ -50,8 +50,8 @@ window.VAL_CONFIG = {
       "Skill issue (jk).",
       "Okay okay, I’ll chill… soon.",
     ],
-    // always show a serious, accessible choice so it never feels coercive
-    showSeriousLinks: true,
+    // Testing-only: show extra direct links (recommended during development)
+    showSeriousLinks: false,
   },
 
   // Put your images in assets/images/ and reference them here.
@@ -135,8 +135,22 @@ window.VAL_CONFIG = {
       noLabel: "Not this time",
       yesHref: "yes.html",
       noHref: "no.html",
-      seriousYesLabel: "Yes (serious)",
-      seriousNoLabel: "No thanks (serious)",
+
+      // When No is clicked (after the chase), ask "really?" a few times.
+      // Each step makes the Yes button bigger.
+      noConfirm: {
+        prompts: [
+          "Really sure?",
+          "Like… 100% sure?",
+          "Okay but what if I say please 😭",
+          "Last chance…?",
+        ],
+        yesScaleStart: 1.0,
+        yesScaleStep: 0.14,
+        noLabelDuring: "I’m sure",
+        yesLabelDuring: "Okay fine… YES 💖",
+        finalNoTaunt: "Okay. I’ll stop asking 💛",
+      },
     },
 
     yes: {

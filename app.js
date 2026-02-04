@@ -1039,27 +1039,6 @@
     hud.appendChild(taunt);
     chapter.appendChild(hud);
 
-    // Serious links (guardrail)
-    if (cfg.allowNo && cfg.chase?.showSeriousLinks !== false) {
-      const row = document.createElement("div");
-      row.className = "microRow";
-      row.appendChild(
-        makeActionLinkButton({
-          label: q?.seriousYesLabel || "Yes (serious)",
-          href: q?.yesHref || "yes.html",
-          variant: "secondary",
-        })
-      );
-      row.appendChild(
-        makeActionLinkButton({
-          label: q?.seriousNoLabel || "No thanks (serious)",
-          href: q?.noHref || "no.html",
-          variant: "secondary",
-        })
-      );
-      chapter.appendChild(row);
-    }
-
     const hint = document.createElement("div");
     hint.className = "microNote";
     hint.textContent = cfg.hintText || "";
@@ -1082,6 +1061,33 @@
       yes: { dodges: 0, max: yesDodges, ready: yesDodges === 0 },
       no: { dodges: 0, max: noDodges, ready: noDodges === 0 },
     };
+
+    // No-confirmation loop
+    const noConfirm = q?.noConfirm || {};
+    const confirmPrompts = Array.isArray(noConfirm.prompts) ? noConfirm.prompts : [];
+    const yesScaleStart = typeof noConfirm.yesScaleStart === "number" ? noConfirm.yesScaleStart : 1.0;
+    const yesScaleStep = typeof noConfirm.yesScaleStep === "number" ? noConfirm.yesScaleStep : 0.14;
+    let confirmIndex = 0;
+
+    function applyYesScale() {
+      const scale = yesScaleStart + confirmIndex * yesScaleStep;
+      yesBtn.style.setProperty("--scale", String(scale));
+    }
+
+    function showConfirmPrompt() {
+      if (!confirmPrompts.length) return;
+      const idx = Math.min(confirmIndex, confirmPrompts.length - 1);
+      setTaunt(confirmPrompts[idx]);
+      applyYesScale();
+
+      if (noConfirm.noLabelDuring) noBtn.textContent = noConfirm.noLabelDuring;
+      if (noConfirm.yesLabelDuring) yesBtn.textContent = noConfirm.yesLabelDuring;
+      // retrigger the pop animation
+      yesBtn.classList.remove("isReady");
+      // eslint-disable-next-line no-unused-expressions
+      yesBtn.offsetWidth;
+      yesBtn.classList.add("isReady");
+    }
 
     function setTaunt(text) {
       taunt.textContent = text;
@@ -1161,11 +1167,31 @@
     noBtn.addEventListener("click", () => {
       if (!cfg.allowNo) return;
       if (!state.no.ready && enabled) {
-        setTaunt("If you really mean no, use the serious link 💛");
+        setTaunt("Not yet 😅");
         return;
       }
+
+      // Confirm loop
+      if (confirmPrompts.length && confirmIndex < confirmPrompts.length) {
+        showConfirmPrompt();
+        confirmIndex += 1;
+        return;
+      }
+
+      if (confirmPrompts.length) {
+        setTaunt(noConfirm.finalNoTaunt || "Okay 💛");
+        // small delay feels nicer
+        setTimeout(() => {
+          window.location.href = q?.noHref || "no.html";
+        }, 450);
+        return;
+      }
+
       window.location.href = q?.noHref || "no.html";
     });
+
+    // Start scales clean
+    yesBtn.style.setProperty("--scale", String(yesScaleStart));
   }
 
   function renderResponsePage(kind) {
