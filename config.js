@@ -33,13 +33,15 @@ window.VAL_CONFIG = {
   // then set e.g. stockImages: ["assets/images/letter-bg.jpg"].
   background: {
     style: "stock", // "stock" | "paper"
-    stockImages: ["assets/images/untiteled.jpg"],
-    photoOpacity: 0.28,
+    stockImages: ["assets/images/Untitled.jpg"],
+    photoOpacity: 0.55,
     photoBlurPx: 0,
-    photoSaturate: 1.05,
+    photoSaturate: 1.55,
     showLines: false,
     showDoodles: true,
-    doodlesOpacity: 0.18,
+    doodlesOpacity: 0.1,
+    // Hearts tile size. "33vh" makes ~3 repeats per viewport height.
+    doodlesSize: "39vh",
   },
 
   // Optional footer hint text

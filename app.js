@@ -46,7 +46,8 @@
 
     const showLines = bgCfg.showLines === true;
     const showDoodles = bgCfg.showDoodles !== false;
-    const doodlesOpacity = typeof bgCfg.doodlesOpacity === "number" ? bgCfg.doodlesOpacity : 0.18;
+    const doodlesOpacity = typeof bgCfg.doodlesOpacity === "number" ? bgCfg.doodlesOpacity : 0.1;
+    const doodlesSize = bgCfg.doodlesSize;
 
     root.style.setProperty("--bg-photo-url", photoUrl ? `url(${JSON.stringify(photoUrl)})` : "none");
     root.style.setProperty("--bg-photo-opacity", photoUrl ? String(photoOpacity) : "0");
@@ -59,6 +60,12 @@
 
     const finalDoodlesOpacity = showDoodles ? (photoUrl ? String(doodlesOpacity) : String(doodlesOpacity)) : "0";
     root.style.setProperty("--bg-doodles-opacity", finalDoodlesOpacity);
+
+    if (typeof doodlesSize === "number" && Number.isFinite(doodlesSize)) {
+      root.style.setProperty("--bg-doodles-size", `${Math.max(40, doodlesSize)}px`);
+    } else if (typeof doodlesSize === "string" && doodlesSize.trim().length) {
+      root.style.setProperty("--bg-doodles-size", doodlesSize.trim());
+    }
   }
 
   function ensureLetterHud() {
