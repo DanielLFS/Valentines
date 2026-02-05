@@ -155,6 +155,7 @@ window.VAL_CONFIG = {
             // Final-collage tuning
             spread: 0.95,
             targetCount: 40,
+            appearScale: 3.0,
             columns: 3,
             // If true, the order is a stable shuffle.
             shuffle: false,

@@ -1286,6 +1286,9 @@
           const depositDurRaw = typeof gcfg.depositDur === "number" ? gcfg.depositDur : 0.15;
           const depositDur = Math.max(0.08, Math.min(0.32, depositDurRaw));
 
+          const appearScaleRaw = typeof gcfg.appearScale === "number" ? gcfg.appearScale : 1.65;
+          const appearScale = clamp(appearScaleRaw, 1.0, 3.0);
+
           galleries.push({
             trackEl: track,
             update: (p01) => {
@@ -1363,7 +1366,7 @@
                 const x = lerp(0, m.x, eased);
                 const y = lerp(28, m.y, eased);
                 const rot = lerp(0, m.r, eased);
-                const scale = lerp(1.65, 1.0, eased);
+                const scale = lerp(appearScale, 1.0, eased);
 
                 const opacity = landed ? 1 : active ? 1 : appearT;
                 m.el.style.opacity = `${opacity.toFixed(3)}`;
