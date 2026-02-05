@@ -913,9 +913,27 @@
 
     const chapterMeta = new Map();
     const trackEls = [];
+    const galleries = [];
+
+    function stableShuffle(list, seed) {
+      const arr = Array.isArray(list) ? [...list] : [];
+      let s = 0;
+      const str = String(seed || "seed");
+      for (let i = 0; i < str.length; i++) s = (s * 31 + str.charCodeAt(i)) >>> 0;
+      // Fisher-Yates with LCG
+      for (let i = arr.length - 1; i > 0; i--) {
+        s = (1664525 * s + 1013904223) >>> 0;
+        const j = s % (i + 1);
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
 
     for (let chapterIndex = 0; chapterIndex < chapters.length; chapterIndex++) {
       const ch = chapters[chapterIndex];
+      const layout = (ch.layout || "split").toLowerCase();
       const track = document.createElement("div");
       track.className = "chapterTrack";
       track.id = `chapter-${ch.id}`;
@@ -959,19 +977,55 @@
       }
 
       const right = document.createElement("div");
-      const key = ch.imageKey;
-      const src = key ? cfg.images?.[key] : null;
-      if (src) {
-        const media = document.createElement("div");
-        media.className = "chapterMedia";
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = ch.imageAlt || "";
-        media.appendChild(img);
-        right.appendChild(media);
-      } else {
-        // No image for this chapter: avoid an empty right column.
+
+      if (layout === "gallery") {
         grid.style.gridTemplateColumns = "1fr";
+        const gcfg = ch.gallery || {};
+        const cols = Number.isFinite(gcfg.columns) ? Math.max(2, Math.min(6, gcfg.columns)) : 3;
+        const rawImages = Array.isArray(gcfg.images) ? gcfg.images.filter(Boolean) : [];
+        const images = gcfg.shuffle ? stableShuffle(rawImages, ch.id) : rawImages;
+
+        const wrap = document.createElement("div");
+        wrap.className = "galleryWrap";
+
+        const gridEl = document.createElement("div");
+        gridEl.className = "galleryGrid";
+        gridEl.style.setProperty("--cols", String(cols));
+
+        const items = [];
+        for (const src of images) {
+          const fig = document.createElement("figure");
+          fig.className = "galleryItem";
+
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = "";
+          img.loading = "lazy";
+          img.decoding = "async";
+          fig.appendChild(img);
+
+          gridEl.appendChild(fig);
+          items.push(fig);
+        }
+
+        wrap.appendChild(gridEl);
+        left.appendChild(wrap);
+        galleries.push({ trackEl: track, items });
+      } else {
+        const key = ch.imageKey;
+        const src = key ? cfg.images?.[key] : null;
+        if (src) {
+          const media = document.createElement("div");
+          media.className = "chapterMedia";
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = ch.imageAlt || "";
+          media.appendChild(img);
+          right.appendChild(media);
+        } else {
+          // No image for this chapter: avoid an empty right column.
+          grid.style.gridTemplateColumns = "1fr";
+        }
       }
 
       grid.appendChild(left);
@@ -1132,6 +1186,19 @@
         const tr = lerpObj(f.from || {}, f.to || {}, t);
         node.style.opacity = `${clamp01(tr.opacity)}`;
         node.style.transform = `translate(-50%, -50%) translate(${tr.x.toFixed(0)}px, ${tr.y.toFixed(0)}px) rotate(${tr.rot.toFixed(1)}deg) scale(${tr.scale.toFixed(3)})`;
+      }
+
+      // Reveal gallery items as you scroll through that chapter's track.
+      for (const g of galleries) {
+        const p = prefersReducedMotion() ? 1 : trackProgress(g.trackEl);
+        const n = g.items.length;
+        const revealCount = Math.min(n, Math.floor(p * (n + 1)));
+        for (let i = 0; i < n; i++) {
+          const el = g.items[i];
+          if (!el) continue;
+          const should = i < revealCount;
+          el.classList.toggle("isRevealed", should);
+        }
       }
 
       if (!prefersReducedMotion()) requestAnimationFrame(update);
