@@ -328,6 +328,36 @@ button {
   overflow: clip;
 }
 
+/* Gallery chapter: photos land on the "envelope" background.
+   The letter text lives in a separate paper panel. */
+.chapterGallery {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: visible;
+}
+
+.paperLetter {
+  background: var(--card);
+  border: 1px solid var(--cardBorder);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  overflow: clip;
+}
+
+.galleryHost {
+  min-height: 200px;
+}
+
+.chapterGallery .galleryStage {
+  background: transparent;
+  border: 0;
+}
+
 .chapterGrid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;

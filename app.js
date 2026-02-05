@@ -1049,6 +1049,7 @@
       const chapter = document.createElement("section");
       chapter.className = "chapter";
       chapter.dataset.chapterId = ch.id;
+      if (layout === "gallery") chapter.classList.add("chapterGallery");
 
       const header = document.createElement("header");
       header.className = "header";
@@ -1078,23 +1079,42 @@
       sub.className = "subtitle";
       sub.textContent = ch.subtitle || "";
       header.appendChild(sub);
-      chapter.appendChild(header);
 
       const grid = document.createElement("div");
       grid.className = "chapterGrid";
 
-      const left = document.createElement("div");
-      left.className = "body";
+      const bodyBox = document.createElement("div");
+      bodyBox.className = "body";
       for (const line of ch.body || []) {
         const p = document.createElement("p");
         p.textContent = line;
-        left.appendChild(p);
+        bodyBox.appendChild(p);
       }
 
-      const right = document.createElement("div");
+      // Default split layout columns
+      let left = bodyBox;
+      let right = document.createElement("div");
+
+      // Gallery layout becomes: [gallery on background] [paper letter panel]
+      let galleryHost = null;
+      if (layout === "gallery") {
+        grid.style.gridTemplateColumns = "1.2fr 0.8fr";
+        galleryHost = document.createElement("div");
+        galleryHost.className = "galleryHost";
+
+        const paper = document.createElement("div");
+        paper.className = "paperLetter";
+        paper.appendChild(header);
+        paper.appendChild(bodyBox);
+
+        left = galleryHost;
+        right = paper;
+      } else {
+        chapter.appendChild(header);
+      }
 
       if (layout === "gallery") {
-        grid.style.gridTemplateColumns = "1fr";
+        // galleryHost is created above for gallery chapters
         const gcfg = ch.gallery || {};
         const cols = Number.isFinite(gcfg.columns) ? Math.max(2, Math.min(6, gcfg.columns)) : 3;
         const rawImages = Array.isArray(gcfg.images) ? gcfg.images.filter(Boolean) : [];
@@ -1183,7 +1203,7 @@
           }
 
           wrap.appendChild(stage);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           const depositDurRaw = typeof gcfg.depositDur === "number" ? gcfg.depositDur : 0.15;
           const depositDur = Math.max(0.08, Math.min(0.32, depositDurRaw));
@@ -1243,7 +1263,7 @@
           stage.appendChild(counter);
 
           wrap.appendChild(stage);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           let current = -1;
           galleries.push({
@@ -1270,7 +1290,7 @@
           img.className = "orbitImg";
           stage.appendChild(img);
           wrap.appendChild(stage);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           galleries.push({
             trackEl: track,
@@ -1331,7 +1351,7 @@
           }
 
           wrap.appendChild(list);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           galleries.push({
             trackEl: track,
@@ -1369,7 +1389,7 @@
           }
 
           wrap.appendChild(stage);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           galleries.push({
             trackEl: track,
@@ -1400,7 +1420,7 @@
           }
 
           wrap.appendChild(stage);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           const windowT = typeof gcfg.windowT === "number" ? Math.max(0.12, Math.min(0.6, gcfg.windowT)) : 0.28;
           galleries.push({
@@ -1435,7 +1455,7 @@
           }
 
           wrap.appendChild(gridEl);
-          left.appendChild(wrap);
+          galleryHost.appendChild(wrap);
 
           galleries.push({
             trackEl: track,
@@ -1977,3 +1997,11 @@
     }
   }
 })();
+
+      // Compose the grid
+      grid.appendChild(left);
+      grid.appendChild(right);
+      chapter.appendChild(grid);
+      sticky.appendChild(chapter);
+      track.appendChild(sticky);
+      scrollyRootEl.appendChild(track);
