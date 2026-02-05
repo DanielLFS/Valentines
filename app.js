@@ -1299,21 +1299,35 @@
                if (!laidOut && w > 20 && h > 20) {
                  // Target: each photo roughly covers stageArea/20 (like you asked).
                  const stageArea = w * h;
-                 const targetArea = stageArea / targetCount;
+                  const targetFrameArea = stageArea / targetCount;
 
                  for (const m of metas) {
                    const iw = m.img.naturalWidth || 4;
                    const ih = m.img.naturalHeight || 3;
                    const ratio = iw / ih;
-                   const mediaW = Math.sqrt(targetArea * ratio);
-                   const mediaH = Math.sqrt(targetArea / ratio);
                    const framePadX = 24; // matches .finalItem left+right padding
                    const framePadY = 34; // top padding + thicker bottom polaroid strip
-                   const figW = Math.max(140, Math.min(mediaW + framePadX, w * 0.48));
-                   const figH = Math.max(140, Math.min(mediaH + framePadY, h * 0.62));
-                   m.width = figW;
-                   m.height = figH;
-                   m.el.style.width = `${figW.toFixed(1)}px`;
+
+                    // Solve for k such that (mediaW+padX)*(mediaH+padY) ~= targetFrameArea,
+                    // with mediaW = k*sqrt(ratio), mediaH = k/sqrt(ratio).
+                    const a = Math.sqrt(Math.max(0.05, ratio));
+                    const b = 1 / a;
+                    const B = a * framePadY + framePadX * b;
+                    const C = framePadX * framePadY - targetFrameArea;
+                    const disc = Math.max(0, B * B - 4 * C);
+                    const k = Math.max(0, (-B + Math.sqrt(disc)) / 2);
+
+                    const mediaW = k * a;
+                    const mediaH = k * b;
+                    const figWRaw = mediaW + framePadX;
+                    const figHRaw = mediaH + framePadY;
+
+                    const figW = Math.max(120, Math.min(figWRaw, w * 0.46));
+                    const figH = Math.max(120, Math.min(figHRaw, h * 0.58));
+
+                    m.width = figW;
+                    m.height = figH;
+                    m.el.style.width = `${figW.toFixed(1)}px`;
                  }
 
                  // Place largest first to reduce center clumping.

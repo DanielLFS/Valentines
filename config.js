@@ -154,7 +154,7 @@ window.VAL_CONFIG = {
             bare: true,
             // Final-collage tuning
             spread: 0.95,
-            targetCount: 25,
+            targetCount: 40,
             columns: 3,
             // If true, the order is a stable shuffle.
             shuffle: false,
