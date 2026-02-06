@@ -1131,13 +1131,35 @@
         const cols = Number.isFinite(gcfg.columns) ? Math.max(2, Math.min(6, gcfg.columns)) : 3;
         const rawImages = Array.isArray(gcfg.images) ? gcfg.images.filter(Boolean) : [];
         const requestedMode = String(gcfg.mode || "").trim().toLowerCase();
+
+        // Order options:
+        // - `shuffle` (legacy): stable shuffle (deterministic) when true
+        // - `randomize` (new): randomize order; default is true
+        //   - randomizeMode: "random" (changes each load) | "stable" (deterministic)
+        //   - randomizeSeed: custom seed for deterministic ordering
+        const randomizeEnabled = typeof gcfg.randomize === "boolean" ? gcfg.randomize : true;
+        const randomizeMode = String(gcfg.randomizeMode || "random").trim().toLowerCase();
+        const randomizeSeed = typeof gcfg.randomizeSeed === "string" && gcfg.randomizeSeed.trim().length
+          ? gcfg.randomizeSeed.trim()
+          : null;
+        const legacyShuffle = gcfg.shuffle === true;
         const baseMode = requestedMode && GALLERY_MODES.has(requestedMode)
           ? requestedMode
-          : gcfg.shuffle
-            ? "grid-shuffle"
-            : "grid";
+          : "grid";
         const mode = galleryModeOverride || baseMode;
-        const images = mode === "grid-shuffle" || gcfg.shuffle ? stableShuffle(rawImages, ch.id) : rawImages;
+
+        // Decide image order
+        let images = rawImages;
+        if (mode === "grid-shuffle") {
+          images = stableShuffle(rawImages, ch.id);
+        } else if (legacyShuffle) {
+          images = stableShuffle(rawImages, ch.id);
+        } else if (randomizeEnabled && rawImages.length > 1) {
+          const seed = randomizeSeed
+            ? `${ch.id}:${randomizeSeed}`
+            : (randomizeMode === "stable" ? ch.id : `${ch.id}:${Date.now()}`);
+          images = stableShuffle(rawImages, seed);
+        }
 
         const wrap = document.createElement("div");
         wrap.className = `galleryWrap galleryMode-${mode}`;

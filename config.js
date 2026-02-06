@@ -155,13 +155,15 @@ window.VAL_CONFIG = {
             // Final-collage tuning
             spread: 0.95,
             targetCount: 40,
-            appearScale: 2.0,
+            appearScale: 2.5,
             // Alternative sizing: make each polaroid frame height ~ % of the stage height.
             // (When set, this overrides targetCount sizing in "final" mode.)
-            targetHeightFrac: 0.2,
+            targetHeightFrac: 0.1,
             columns: 3,
-            // If true, the order is a stable shuffle.
-            shuffle: false,
+            // Randomize order (default is true if omitted).
+            // - randomizeMode: "random" reshuffles each load, "stable" keeps a consistent order.
+            randomize: true,
+            randomizeMode: "random",
             images: [
               "assets/images/rosterimgs/IMG_0138.jpeg",
               "assets/images/rosterimgs/IMG_0146.jpeg",
