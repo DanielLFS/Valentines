@@ -165,7 +165,7 @@ window.VAL_CONFIG = {
             // If a photo is landscape (w > h), compress its effective aspect ratio
             // so it doesn't get *too* wide.
             // 1.0 = no change, 0.8 = 80% of the extra width beyond square.
-            landscapeRatioFactor: 0.8,
+            landscapeRatioFactor: 0.2,
             columns: 3,
             // Randomize order (default is true if omitted).
             // - randomizeMode: "random" reshuffles each load, "stable" keeps a consistent order.
