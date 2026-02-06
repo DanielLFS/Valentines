@@ -85,7 +85,7 @@ window.VAL_CONFIG = {
     // Shared fallback taunts file (used if per-button files aren't set).
     tauntsFile: "assets/text/chase-taunts.txt",
     // Shown at bottom once the first button stops dodging.
-    readyJoke: "tiktok brain joke",
+    readyJoke: "Ok, according to my calculations, this was how many times each respective button could have dodged for while keeping your tiktok brain enganged. XxX",
     // Testing-only: show extra direct links (recommended during development)
     showSeriousLinks: false,
   },
@@ -94,7 +94,9 @@ window.VAL_CONFIG = {
   // You can use URLs too, but local files are easiest.
   // Theme images: add your own files under assets/images/ and reference them here.
   // (Placeholders removed.)
-  images: {},
+  images: {
+    noImg: "assets/images/IMG_1576.jpg",
+  },
 
   // Floating visuals (scrolly mode). These can be photos, stickers, etc.
   // Put PNGs/SVGs in assets/images and point imageKey to one of VAL_CONFIG.images keys,
@@ -262,7 +264,7 @@ window.VAL_CONFIG = {
       subtitle: "Best answer ever.",
       body: [
         "It’s official.",
-        "Text me: what do you want to do + when?",
+        "You and me, Friday to saturday, @my_house London, I have the rest of the plans :)",
       ],
       actions: [
         { label: "Back to story", href: "index.html" },
@@ -273,10 +275,11 @@ window.VAL_CONFIG = {
 
     no: {
       title: "All good 💛",
-      subtitle: "Thanks for being honest.",
+      subtitle: "Thanks for being honest, but now I reallly gotta try make you jealous.",
+      imageKey: "noImg",
       body: [
-        "No hard feelings — you’re still my favorite human.",
-        "If you want, we can still do something low-key.",
+        "No hard feelings — you’re still my favorite ehhh near-London u know... butttt I'll now be spending it with this guy!",
+        "If you want, we can still do something very low-key, but I gotta make Francesco feel welcomed in my home (and bed) :)",
       ],
       actions: [
         { label: "Back to story", href: "index.html" },
